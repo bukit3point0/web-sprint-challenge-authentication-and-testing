@@ -1,5 +1,22 @@
+const Auth = require('../auth/auth-model')
+const bcrypt = require('bcryptjs')
+
 module.exports = (req, res, next) => {
-  next();
+  if (req.session.user) {
+    next()
+  } else {
+    if(!req.body) {
+      res.status(401).json({
+        message: `token required`
+      })
+    } else if (req.body === "") {
+      res.status(402).json({
+        message: `token invalid`
+      })
+    }
+  }
+    
+  }
   /*
     IMPLEMENT
 
@@ -11,4 +28,4 @@ module.exports = (req, res, next) => {
     3- On invalid or expired token in the Authorization header,
       the response body should include a string exactly as follows: "token invalid".
   */
-};
+
