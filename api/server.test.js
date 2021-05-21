@@ -25,7 +25,6 @@ describe(`[POST] /api/auth/register`, () => {
     let groot = await db('users').where('username', 'I Am Groot').first()
     expect(bcrypt.compareSync('I Am Groot', groot.password)).toBeTruthy()
     groot = await db('users').where('username', 'I Am Groot').select('username').first()
-    console.log(groot)
     expect(groot).toEqual({username: 'I Am Groot'})
   })
   
@@ -37,16 +36,30 @@ describe(`[POST] /api/auth/register`, () => {
 })
 
 describe(`[POST] /api/auth/login`, () => {
-  it(`permits a user to log in with proper credentials`, () => {
 
+  beforeEach(async () => {
+      await db('users').insert([
+        { username: "I Am Groot", password: bcrypt.hashSync("I Am Groot", 8) },
+        { username: "Rocket Raccoon", password: bcrypt.hashSync("NotARabbit", 8) }
+      ])
   })
 
-  it(`requires a valid username and password to log in`, () => {
+  it(`permits a user to log in with proper credentials`, async () => {
+    let res = await request(server).post('/api/auth/login').send({ username: "I Am Groot", password: "I Am Groot" })
+    expect(res.body.message).toMatch(/welcome, I Am Groot/i)
+    res = await request(server).post('/api/auth/login').send({ username: "Rocket Raccoon", password: "NotARabbit" })
+    expect(res.body.message).toMatch(/welcome, Rocket Raccoon/i)
+  })
 
+  it(`requires a valid username and password to log in`, async () => {
+    let res = await request(server).post('/api/auth/login').send({ username: "I Am Groot", password: "I AM Groot" })
+    expect(res.body.message).toMatch(/invalid credentials/i)
+    res = await request(server).post('/api/auth/login').send({ username: "Rocket Raccoon"})
+    expect(res.body.message).toMatch(/username and password required/i)
   })
 })
 
-describe(`[GET] /api/auth/login`, () => {
+describe(`[GET] /api/jokes`, () => {
   it(`permits a user to view the jokes when logged in`, () => {
 
   })
