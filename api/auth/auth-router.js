@@ -8,7 +8,6 @@ router.post('/register', checkUsernameFree, checkFields, (req, res, next) => {
   const {username, password} = req.body
   const trimUser = username.trim()
   const hash = bcrypt.hashSync(password, 8)
-  console.log(hash)
 
   Auth.add({username: trimUser, password: hash})
   .then(user => {

@@ -1,22 +1,34 @@
 const Auth = require('../auth/auth-model')
+const jwt = require('jsonwebtoken')
+const {JWT_SECRET} = require('../secrets')
 const bcrypt = require('bcryptjs')
 
 module.exports = (req, res, next) => {
-  if (req.session.user) {
-    next()
+  const token = req.headers.authorization
+  console.log(token)
+  // if(!token || token === null) {
+    
+  // }
+  
+  if(token) {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(401).json({
+          message: `token invalid`
+        })
+      } else {
+        req.decodedJwt = decoded
+        next()
+      } 
+    }) 
   } else {
-    if(!req.body) {
-      res.status(401).json({
-        message: `token required`
-      })
-    } else if (req.body === "") {
-      res.status(402).json({
-        message: `token invalid`
-      })
-    }
+    res.status(401).json({
+      message: `token required`
+    })
+
   }
     
-  }
+}
   /*
     IMPLEMENT
 
