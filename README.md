@@ -32,8 +32,8 @@ We will hash the user's password using `bcryptjs`, and use JSON Web Tokens and t
 
 Your finished project must include all of the following requirements (further instructions are found inside each file):
 
-- [ ] An authentication workflow with functionality for account creation and login, implemented inside `api/auth/auth-router.js`.
-- [ ] Middleware used to restrict access to resources from non-authenticated requests, implemented inside `api/middleware/restricted.js`.
+- [X] An authentication workflow with functionality for account creation and login, implemented inside `api/auth/auth-router.js`.
+- [X] Middleware used to restrict access to resources from non-authenticated requests, implemented inside `api/middleware/restricted.js`.
 - [ ] A minimum of 2 tests per API endpoint, written inside `api/server.test.js`.
 
 **Notes:**
@@ -55,15 +55,15 @@ Your finished project must include all of the following requirements (further in
 These goals may or may not be things you have learned in this module but they build on the material you just studied. Time allowing, stretch your limits and see if you can deliver on the following optional goals:
 
 - [ ] Write at least 4 tests per endpoint.
-- [ ] Extract user validation into a separate method and write unit tests for it.
+- [X] Extract user validation into a separate method and write unit tests for it.
 - [ ] Implement authentication using sessions instead of tokens. Build separate auth endpoints & middleware for this to avoid breaking tests.
 
 ## Submission format
 
-- [ ] Submit via Codegrade by committing and pushing any new changes.
-- [ ] Create a pull request to merge `<firstName-lastName>` branch into `main`.
-- [ ] Please don't merge your own pull request and make sure **you are on your own repo**.
-- [ ] Check Codegrade for automated feedback.
+- [X] Submit via Codegrade by committing and pushing any new changes.
+- [X] Create a pull request to merge `<firstName-lastName>` branch into `main`.
+- [X] Please don't merge your own pull request and make sure **you are on your own repo**.
+- [X] Check Codegrade for automated feedback.
 - [ ] Check Codegrade on Monday following the Sprint Challenge for reviewer feedback.
 - [ ] Any changes pushed after the deadline will not receive any feedback.
 
