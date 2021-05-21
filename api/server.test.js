@@ -60,11 +60,39 @@ describe(`[POST] /api/auth/login`, () => {
 })
 
 describe(`[GET] /api/jokes`, () => {
-  it(`permits a user to view the jokes when logged in`, () => {
+  beforeEach(async () => {
+    await db('users').insert([
+      { username: "I Am Groot", password: bcrypt.hashSync("I Am Groot", 8) },
+      { username: "Rocket Raccoon", password: bcrypt.hashSync("NotARabbit", 8) }
+    ])
+})
 
+  it(`permits a user to view the jokes when logged in`, async () => {
+    const login = await request(server).post('/api/auth/login').send({ username: "I Am Groot", password: "I Am Groot" })
+    let getJokes = await request(server).get('/api/jokes').set('Authorization', login.body.token)
+    expect(getJokes.body).toHaveLength(3)
+    expect(getJokes.body).toMatchObject([
+      {
+        id: '0189hNRf2g',
+        joke: "I'm tired of following my dreams. I'm just going to ask them where they are going and meet up with them later."
+      },
+      {
+        id: '08EQZ8EQukb',
+        joke: "Did you hear about the guy whose whole left side was cut off? He's all right now."
+      },
+      {
+        id: '08xHQCdx5Ed',
+        joke: 'Why didn’t the skeleton cross the road? Because he had no guts.'
+      }
+    ])
   })
 
-  it(`denies access to jokes when not logged in`, () => {
-
+  it(`denies access to jokes when not logged in`, async () => {
+    let getJokes = await request(server).get('/api/jokes')
+    expect(getJokes.body.message).toMatch(/token required/i)
+    
+    const login = await request(server).post('/api/auth/login').send({ username: "I Am Groot", password: "I Am Groot" })
+    getJokes = await request(server).get('/api/jokes').set('Authorization', (login.body.token)+42)
+    expect(getJokes.body.message).toMatch(/token invalid/i)
   })
 })
